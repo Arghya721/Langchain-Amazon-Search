@@ -1,0 +1,35 @@
+# This workflow will build a new docker image(TEST) from Dockerfile 
+# and push it to AWS Lambda using serverless framework
+
+name: Docker Image CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Build the Docker image
+      run: docker build -t test .
+
+    - name: Configure AWS Credentials
+    uses: aws-actions/configure-aws-credentials@v1
+    with:
+      aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      aws-region: ${{ secrets.AWS_REGION }}
+      aws-lambda-function: ${{ secrets.AWS_LAMBDA_FUNCTION }}
+
+    - name: Deploy to AWS Lambda
+      run: |
+        npm install -g serverless
+        serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        serverless deploy
