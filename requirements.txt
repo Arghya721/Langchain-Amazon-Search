@@ -3,4 +3,4 @@ uvicorn
 mangum
 langchain
 openai
-dotenv
+python-dotenv
