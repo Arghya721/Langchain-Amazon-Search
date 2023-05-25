@@ -1,6 +1,6 @@
 FROM public.ecr.aws/lambda/python:3.8
 
-COPY app.py requirements.txt ./
+COPY . .
 
 # Install dependencies
 RUN pip install -r requirements.txt
