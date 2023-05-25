@@ -1,8 +1,14 @@
 """Main Lambda function for the API."""
 import json
+from mangum import Mangum
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
-from mangum import Mangum
+from langchain_engine.engine import text_to_link
+from pydantic import BaseModel
+
+class Text(BaseModel):
+    """Text to be converted to link"""
+    text: str
 
 app = FastAPI()
 handler = Mangum(app)
@@ -11,6 +17,15 @@ handler = Mangum(app)
 async def root():
     return {"message": "Welcome to my bookstore app!"}
 
-@app.get("/amazon")
-async def amazon():
-    return {"message": "Welcome to my amazon smart search!"}
+@app.post("/amazon")
+async def amazon(text: Text):
+    """Get Amazon link from text"""
+
+    text_dict = text.dict()
+
+    amazon_link = text_to_link(text_dict['text'])
+
+    return {"amazon_link": amazon_link}
+
+
+    
