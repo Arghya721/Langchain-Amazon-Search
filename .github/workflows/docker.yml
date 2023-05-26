@@ -17,7 +17,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Build the Docker image
-        run: docker build --build-arg OPEN_API_KEY=${{ secrets.OPEN_API }} -t test .
+        run: docker build --build-arg OPEN_API_KEY=${{ secrets.OPEN_API_KEY }} -t test .
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -29,5 +29,7 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           npm install -g serverless
+          export API_URL=${{ secrets.API_URL }}
+          export OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
