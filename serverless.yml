@@ -12,9 +12,6 @@ plugins:
 
 provider:
   name: aws
-  environment: 
-    API_URL: ${env:API_URL}
-    OPEN_API_KEY: ${env:OPEN_API_KEY}
   ecr:
     # In this section you can define images that will be built locally and uploaded to ECR
     images:
