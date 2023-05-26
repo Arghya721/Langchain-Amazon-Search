@@ -29,7 +29,8 @@ jobs:
       - name: Deploy to AWS Lambda
         run: |
           npm install -g serverless
-          export API_URL=${{ secrets.API_URL }}
-          export OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}
+          npm install --save-dev serverless-dotenv-plugin
+          cp .env.example .env
+          sed -i "s/OPEN_API_KEY=.*/OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}/g" .env
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy

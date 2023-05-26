@@ -7,6 +7,9 @@ service: amazon-langchain-search
 # Check out our docs for more details
 frameworkVersion: '3'
 
+plugins:
+  - serverless-dotenv-plugin
+
 provider:
   name: aws
   environment: 
