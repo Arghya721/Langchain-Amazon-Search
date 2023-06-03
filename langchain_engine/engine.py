@@ -23,10 +23,10 @@ def text_to_link(text):
 
     product_information = json.loads(ans.content)
 
-    if product_information['lower_price'] == '0' or product_information['lower_price'] == 0: 
+    if product_information['lower_price'] == '0' or product_information['lower_price'] == 0 or product_information['lower_price'] == '':
         product_information['lower_price'] = None
     
-    if product_information['upper_price'] == '0' or product_information['upper_price'] == 0:
+    if product_information['upper_price'] == '0' or product_information['upper_price'] == 0 or product_information['upper_price'] == '':
         product_information['upper_price'] = None
 
     print(product_information)
