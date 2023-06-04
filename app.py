@@ -8,8 +8,7 @@ from pydantic import BaseModel
 from fastapi.middleware.cors import CORSMiddleware
 
 origins = [
-    "https://main.d1dk42vajv0a7r.amplifyapp.com",
-    "http://localhost:3000",
+    "*",
 ]
 
 
