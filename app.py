@@ -5,12 +5,26 @@ from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
 from langchain_engine.engine import text_to_link
 from pydantic import BaseModel
+from fastapi.middleware.cors import CORSMiddleware
+
+origins = [
+    "https://main.d1dk42vajv0a7r.amplifyapp.com",
+    "http://localhost:3000",
+]
+
 
 class Text(BaseModel):
     """Text to be converted to link"""
     text: str
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 handler = Mangum(app)
 
 @app.get("/")
