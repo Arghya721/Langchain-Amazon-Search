@@ -8,6 +8,8 @@ def scrap_search_page_data(response, api_url):
     # declare a list to store the data
     search_page_data = []
 
+    print(response.content)
+
     # parse the response
     soup = BeautifulSoup(response.content, 'html.parser')
 
