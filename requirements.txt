@@ -4,3 +4,4 @@ mangum
 langchain
 openai
 python-dotenv
+beautifulsoup4==4.12.2
