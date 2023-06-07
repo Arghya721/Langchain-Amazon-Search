@@ -1,31 +1,12 @@
 """This module contains the http client for the amazon scrapper. This module is responsible for making the requests to the API. After getting the response from the API, it passes the response to the data_scrapper module to scrap the data from the response."""
 from concurrent.futures import ThreadPoolExecutor
 import requests
-import config.api as config
-from .data_scrapper import scrap_search_page_data, scrap_page_data
+# import config.api as config
+from amazon_scrapper.data_scrapper import scrap_search_page_data
 
 
 def get_search_page_data(api_url):
     """Get the search page data from the API"""
-
-    # get categories api url
-    categories = config.category_url()
-
-    categories_response = requests.get(categories, timeout=5)
-
-    # check if the response is 200
-    if categories_response.status_code != 200:
-        print("Error: API call failed")
-        return
-
-    # get all categories
-    try:
-        categories_response.raise_for_status()
-    except requests.exceptions.HTTPError as err:
-        raise SystemExit(err) from err
-
-    # get all categories
-    categories = categories_response.json().get("categories")
 
     # declare headers for the requests
     headers = {
@@ -42,21 +23,16 @@ def get_search_page_data(api_url):
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     }
 
+
+    response = requests.get(api_url, headers=headers, timeout=5)
+
     search_page_data = []
 
-    for category in categories:
-
-        # make query params
-        request_url = f"{api_url}/s/k={category}"
-
-        # make the request
-        response = requests.get(request_url, headers=headers, timeout=5)
-
-        # check if the request is successfull
-        if response.status_code == 200:
-            # scrap the data
-            search_page_data = search_page_data + \
-                scrap_search_page_data(response, category, api_url)
+    # check if the request is successfull
+    if response.status_code == 200:
+        # scrap the data
+        search_page_data = search_page_data + \
+            scrap_search_page_data(response, api_url)
 
     return search_page_data
 

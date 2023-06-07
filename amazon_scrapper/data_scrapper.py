@@ -2,7 +2,7 @@
 from bs4 import BeautifulSoup
 
 
-def scrap_search_page_data(response, category, api_url):
+def scrap_search_page_data(response, api_url):
     """Scrap the search page data from the response"""
 
     # declare a list to store the data
@@ -42,6 +42,10 @@ def scrap_search_page_data(response, category, api_url):
             product_price = "Not available"
         else:
             product_price = product_price.text
+        
+
+        # get image url
+        image_url = page_data_html.find('img', class_='s-image').get('src')
 
         product_link =  api_url + "/dp/" + asin
 
@@ -51,7 +55,7 @@ def scrap_search_page_data(response, category, api_url):
             'productTitle': product_title,
             'productPrice': product_price,
             'productLink': product_link,
-            'category': category
+            'image_url': image_url
         }
 
         search_page_data.append(product_details)

@@ -15,7 +15,7 @@ def text_to_link(text):
     # get response from openai
     ans = chat(
         [
-            SystemMessage(content="Extract vital information from the user's sentence describing an Amazon product. Output in JSON format with 'search_string' for Amazon search, 'lower_price' and 'upper_price', 'product_description', and 'company_name"),
+            SystemMessage(content="Extract vital information from the user's sentence describing an product. Output in JSON format with 'search_string' for search, 'lower_price' and 'upper_price', 'product_description', and 'company_name"),
             HumanMessage(
                 content=text)
         ]
