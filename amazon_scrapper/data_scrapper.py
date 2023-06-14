@@ -49,7 +49,7 @@ def scrap_search_page_data(response, api_url):
         # get image url
         image_url = page_data_html.find('img', class_='s-image').get('src')
 
-        product_link =  api_url + "/dp/" + asin
+        product_link =  api_url + "dp/" + asin
 
         product_details = {
             'asin': asin,

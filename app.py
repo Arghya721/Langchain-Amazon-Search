@@ -49,6 +49,7 @@ async def amazon(text: Text):
 @app.post("/get-amazon-page-data")
 async def get_amazon_page_data(link: Link):
     """Get Amazon page data"""   
+
     link_dict = link.dict()
 
     amazon_link = link_dict['amazon_link']
