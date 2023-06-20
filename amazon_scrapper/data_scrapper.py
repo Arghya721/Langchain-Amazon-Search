@@ -2,13 +2,11 @@
 from bs4 import BeautifulSoup
 
 
-def scrap_search_page_data(response, api_url):
+def scrap_search_page_data(response, api_url, sort_by):
     """Scrap the search page data from the response"""
 
     # declare a list to store the data
     search_page_data = []
-
-    print(response.content)
 
     # parse the response
     soup = BeautifulSoup(response.content, 'html.parser')
@@ -41,7 +39,7 @@ def scrap_search_page_data(response, api_url):
             product_title = product_title.text
         product_price = page_data_html.find('span', class_='a-price-whole')
         if product_price is None:
-            product_price = "Not available"
+            continue
         else:
             product_price = product_price.text
         
@@ -61,8 +59,28 @@ def scrap_search_page_data(response, api_url):
         }
 
         search_page_data.append(product_details)
+    
+    # sort the search page data
+    search_page_data = sort_search_page_data(search_page_data, sort_by)
 
     return search_page_data
+
+
+def sort_json_by_price(json_response, ascending=True):
+    """Sort the json response by price"""
+    sorted_json = sorted(json_response, key=lambda x: int(x["productPrice"].replace(",", "")), reverse=not ascending)
+    return sorted_json
+
+def sort_search_page_data(search_page_data, sort_by):
+    """Sort the search page data"""
+    sorted_search_page_data = search_page_data
+    if sort_by == "asc":
+        sorted_search_page_data = sort_json_by_price(search_page_data, ascending=True)
+    elif sort_by == "desc":
+        sorted_search_page_data = sort_json_by_price(search_page_data, ascending=False)
+    
+    return sorted_search_page_data
+
 
 
 def scrap_page_data(response, product, api_url):

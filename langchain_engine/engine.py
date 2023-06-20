@@ -2,7 +2,7 @@ from langchain.chat_models import ChatOpenAI
 from langchain.schema import HumanMessage, SystemMessage, AIMessage
 import json
 import config.api as config
-
+import config.prompt as prompt
 
 def text_to_link(text):
     """Convert text to link"""
@@ -11,15 +11,19 @@ def text_to_link(text):
 
     chat = ChatOpenAIchat = ChatOpenAI(
         temperature=1, openai_api_key=openai_api_key)
+    
+    print(prompt.get_prompt())
 
     # get response from openai
     ans = chat(
         [
-            SystemMessage(content="Extract vital information from the user's sentence describing an product. Output in JSON format with 'search_string' for search, 'lower_price' and 'upper_price', 'product_description', and 'company_name"),
+            SystemMessage(content=prompt.get_prompt()),
             HumanMessage(
                 content=text)
         ]
     )
+
+    print(ans)
 
     product_information = json.loads(ans.content)
 
@@ -53,4 +57,4 @@ def text_to_link(text):
     
     amazon_link = config.get_api_url() + "s?" + queries
 
-    return amazon_link
+    return amazon_link , product_information['sort_by']

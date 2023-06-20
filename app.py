@@ -1,6 +1,7 @@
 """Main Lambda function for the API."""
 import json
 from mangum import Mangum
+from typing import Union
 from fastapi import FastAPI, HTTPException
 from fastapi.encoders import jsonable_encoder
 from fastapi.middleware.cors import CORSMiddleware
@@ -20,6 +21,7 @@ class Text(BaseModel):
 class Link(BaseModel):
     """Link returned"""
     amazon_link: str
+    sort_by: Union[str, None]
 
 app = FastAPI()
 app.add_middleware(
@@ -42,9 +44,15 @@ async def amazon(text: Text):
 
     text_dict = text.dict()
 
-    amazon_link = text_to_link(text_dict['text'])
+    amazon_link , sort_by = text_to_link(text_dict['text'])
 
-    return {"amazon_link": amazon_link}
+    response = {
+        "amazon_link": amazon_link,
+        "sort_by": sort_by
+    }
+
+    # return amazon_link and sort_by
+    return jsonable_encoder(response)
 
 @app.post("/get-amazon-page-data")
 async def get_amazon_page_data(link: Link):
@@ -53,10 +61,12 @@ async def get_amazon_page_data(link: Link):
     link_dict = link.dict()
 
     amazon_link = link_dict['amazon_link']
+    sort_by = link_dict['sort_by']
 
     print(amazon_link)
+    print(sort_by)
 
-    amazon_page_data = get_search_page_data(amazon_link)
+    amazon_page_data = get_search_page_data(amazon_link,sort_by)
 
     # return  amazon_page_data
     return jsonable_encoder(amazon_page_data)

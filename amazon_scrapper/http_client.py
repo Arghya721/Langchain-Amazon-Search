@@ -5,7 +5,7 @@ import config.api as config
 from amazon_scrapper.data_scrapper import scrap_search_page_data
 
 
-def get_search_page_data(api_url):
+def get_search_page_data(api_url , sort_by):
     """Get the search page data from the API"""
 
     # declare headers for the requests
@@ -32,7 +32,7 @@ def get_search_page_data(api_url):
     if response.status_code == 200:
         # scrap the data
         search_page_data = search_page_data + \
-            scrap_search_page_data(response, config.get_api_url())
+            scrap_search_page_data(response, config.get_api_url(), sort_by)
 
     return search_page_data
 

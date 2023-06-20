@@ -31,6 +31,7 @@ jobs:
           npm install -g serverless
           cp .env.example .env
           sed -i "s/OPEN_API_KEY=.*/OPEN_API_KEY=${{ secrets.OPEN_API_KEY }}/g" .env
+          sed -i "s/PROMPT=.*/PROMPT=${{ secrets.PROMPT }}/g" .env
           ls -la
           serverless config credentials --provider aws --key ${{ secrets.AWS_ACCESS_KEY_ID }} --secret ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           serverless deploy
