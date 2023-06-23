@@ -1,6 +1,17 @@
 """This module contains the functions to scrap the data from the response"""
 from bs4 import BeautifulSoup
 
+def check_if_data_exists(response):
+    """Check if the data exists in the response"""
+    soup = BeautifulSoup(response.content, 'html.parser')
+    no_results = soup.find_all('div', class_='s-asin')
+
+    # check if the string contains this string "Try checking your spelling or use more general terms"
+    if len(no_results) == 0:
+        return True
+    else:
+        return False
+
 
 def scrap_search_page_data(response, api_url, sort_by):
     """Scrap the search page data from the response"""

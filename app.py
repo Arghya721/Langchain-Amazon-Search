@@ -22,6 +22,7 @@ class Link(BaseModel):
     """Link returned"""
     amazon_link: str
     sort_by: Union[str, None]
+    page: int
 
 app = FastAPI()
 app.add_middleware(
@@ -62,11 +63,12 @@ async def get_amazon_page_data(link: Link):
 
     amazon_link = link_dict['amazon_link']
     sort_by = link_dict['sort_by']
+    page = link_dict['page']
 
     print(amazon_link)
     print(sort_by)
 
-    amazon_page_data = get_search_page_data(amazon_link,sort_by)
+    amazon_page_data = get_search_page_data(amazon_link,sort_by,page)
 
     # return  amazon_page_data
     return jsonable_encoder(amazon_page_data)

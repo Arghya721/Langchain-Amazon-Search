@@ -2,10 +2,10 @@
 from concurrent.futures import ThreadPoolExecutor
 import requests
 import config.api as config
-from amazon_scrapper.data_scrapper import scrap_search_page_data
+from amazon_scrapper.data_scrapper import scrap_search_page_data,check_if_data_exists
 
 
-def get_search_page_data(api_url , sort_by):
+def get_search_page_data(api_url , sort_by, page):
     """Get the search page data from the API"""
 
     # declare headers for the requests
@@ -23,6 +23,9 @@ def get_search_page_data(api_url , sort_by):
         'accept-language': 'en-GB,en-US;q=0.9,en;q=0.8',
     }
 
+    # add page number to the api url
+    api_url = api_url + f'&page={page}'
+
 
     response = requests.get(api_url, headers=headers, timeout=5)
 
@@ -30,6 +33,15 @@ def get_search_page_data(api_url , sort_by):
 
     # check if the request is successfull
     if response.status_code == 200:
+        # check if there is data or not
+        if check_if_data_exists(response) is True:
+            # return status empty code 
+            status = {
+                "status_code": 204,
+                "status": "No data found"
+            }
+            return status
+
         # scrap the data
         search_page_data = search_page_data + \
             scrap_search_page_data(response, config.get_api_url(), sort_by)
