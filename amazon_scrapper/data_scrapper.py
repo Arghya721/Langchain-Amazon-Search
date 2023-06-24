@@ -60,13 +60,28 @@ def scrap_search_page_data(response, api_url, sort_by):
 
         product_link =  api_url + "dp/" + asin
 
+        # get product rating and review count
+        product_rating = page_data_html.find('span', class_='a-icon-alt')
+
+        # 4.3 out of 5 stars extract 4.3 from the string
+        if product_rating is not None:
+            product_rating = product_rating.text.split()[0]
+        
+        product_review_count = page_data_html.find('span', class_='a-size-base')
+
+        if product_review_count is not None:
+            product_review_count = product_review_count.text
+            
+
         product_details = {
             'asin': asin,
             'sponsored': sponsored,
             'productTitle': product_title,
             'productPrice': product_price,
             'productLink': product_link,
-            'image_url': image_url
+            'image_url': image_url,
+            'productRating': product_rating,
+            'productReviewCount': product_review_count
         }
 
         search_page_data.append(product_details)
